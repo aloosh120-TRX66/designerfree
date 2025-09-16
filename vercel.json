@@ -1,15 +1,19 @@
-const express = require("express");
-const path = require("path");
-
-const app = express();
-
-// خلي ملفاتك (css, js, html) تتخدم من مجلد المشروع
-app.use(express.static(path.join(__dirname)));
-
-// أي طلب يرجع index.html
-app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "index.html"));
-});
-
-// لازم نستخدم module.exports حتى Vercel يتعرف عليه
-module.exports = app;
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "server.js",
+      "use": "@vercel/node"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/merge",
+      "dest": "/server.js"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/index.html"
+    }
+  ]
+}
