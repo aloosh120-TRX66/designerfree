@@ -1,21 +1,248 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>دمج الصور بالذكاء الاصطناعي</title>
-  <link rel="stylesheet" href="style.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>دمج الصور بالذكاء الاصطناعي - تطوير: علي لطيف</title>
+    <meta name="description" content="اجعل صورك تبدو كأنها لقطة بولارويد مميزة مع خلفية ستارة بيضاء أنيقة باستخدام الذكاء الاصطناعي">
+    <meta property="og:title" content="دمج الصور بالذكاء الاصطناعي">
+    <meta property="og:description" content="موقع مميز لدمج الصور بالذكاء الاصطناعي مع تأثيرات البولارويد الكلاسيكية">
+    <meta property="og:type" content="website">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-  <div class="container">
-    <h1>دمج صورتك مع صديقك بالذكاء الاصطناعي</h1>
-    <form id="form">
-      <input type="file" id="img1" accept="image/*" required />
-      <input type="file" id="img2" accept="image/*" required />
-      <button type="submit">دمج</button>
-    </form>
-    <img id="result" alt="النتيجة" />
-  </div>
-  <script src="script.js"></script>
+    <!-- تأثيرات الخلفية -->
+    <div class="background-effects">
+        <div class="sparkle" style="top: 10%; left: 20%; animation-delay: 0s;"></div>
+        <div class="sparkle" style="top: 30%; left: 80%; animation-delay: 0.5s;"></div>
+        <div class="sparkle" style="top: 50%; left: 40%; animation-delay: 1s;"></div>
+        <div class="sparkle" style="top: 70%; left: 70%; animation-delay: 1.5s;"></div>
+        <div class="sparkle" style="top: 90%; left: 30%; animation-delay: 2s;"></div>
+    </div>
+
+    <!-- القسم الرئيسي -->
+    <section class="hero-section">
+        <div class="container">
+            <!-- العنوان الرئيسي -->
+            <div class="hero-content floating-animation">
+                <h1 class="main-title">
+                    <span class="gradient-text">دمج الصور</span><br>
+                    <span class="white-text">بالذكاء الاصطناعي</span>
+                </h1>
+                <p class="subtitle typewriter">
+                    اجعل صورك تبدو كأنها لقطة بولارويد مميزة مع خلفية ستارة بيضاء أنيقة
+                </p>
+            </div>
+
+            <!-- أزرار العمل -->
+            <div class="action-buttons">
+                <button onclick="scrollToUpload()" class="btn btn-primary" data-testid="start-merging-button">
+                    <i class="fas fa-upload"></i>
+                    ابدأ الدمج الآن
+                </button>
+                <button onclick="showDemo()" class="btn btn-secondary">
+                    <i class="fas fa-play"></i>
+                    شاهد العرض التوضيحي
+                </button>
+            </div>
+
+            <!-- بطاقات المميزات -->
+            <div class="features-grid">
+                <div class="feature-card floating-animation">
+                    <div class="feature-icon">
+                        <i class="fas fa-magic"></i>
+                    </div>
+                    <h3>ذكاء اصطناعي متطور</h3>
+                    <p>تقنية AI حديثة لدمج الصور بجودة احترافية</p>
+                </div>
+
+                <div class="feature-card floating-animation">
+                    <div class="feature-icon">
+                        <i class="fas fa-camera"></i>
+                    </div>
+                    <h3>نمط بولارويد عتيق</h3>
+                    <p>إطارات كلاسيكية مع تأثيرات الفلاش التقليدية</p>
+                </div>
+
+                <div class="feature-card floating-animation">
+                    <div class="feature-icon">
+                        <i class="fas fa-download"></i>
+                    </div>
+                    <h3>جودة عالية</h3>
+                    <p>تحميل فوري للصور بأعلى جودة ممكنة</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- قسم رفع الصور -->
+    <section id="upload-section" class="upload-section">
+        <div class="container">
+            <h2 class="section-title">
+                <span class="gradient-text">ارفع صورتين للدمج</span>
+            </h2>
+
+            <div class="upload-grid">
+                <!-- رفع الصورة الأولى -->
+                <div class="upload-area glass-effect" data-testid="upload-zone-الصورة الأولى">
+                    <h3>الصورة الأولى</h3>
+                    <div class="upload-zone" onclick="selectFile('firstImage')">
+                        <div class="upload-icon">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                        </div>
+                        <p class="upload-text">اسحب الصورة هنا أو اضغط للتصفح</p>
+                        <p class="upload-info">JPG, PNG, WEBP (حد أقصى 10MB)</p>
+                        <input type="file" id="firstImage" accept="image/*" onchange="previewImage('firstImage', 'firstPreview')">
+                    </div>
+                    <div id="firstPreview" class="image-preview"></div>
+                </div>
+
+                <!-- رفع الصورة الثانية -->
+                <div class="upload-area glass-effect" data-testid="upload-zone-الصورة الثانية">
+                    <h3>الصورة الثانية</h3>
+                    <div class="upload-zone" onclick="selectFile('secondImage')">
+                        <div class="upload-icon">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                        </div>
+                        <p class="upload-text">اسحب الصورة هنا أو اضغط للتصفح</p>
+                        <p class="upload-info">JPG, PNG, WEBP (حد أقصى 10MB)</p>
+                        <input type="file" id="secondImage" accept="image/*" onchange="previewImage('secondImage', 'secondPreview')">
+                    </div>
+                    <div id="secondPreview" class="image-preview"></div>
+                </div>
+            </div>
+
+            <!-- زر الدمج -->
+            <div class="merge-button-container">
+                <button id="mergeButton" onclick="mergeImages()" class="btn btn-gradient" disabled data-testid="merge-images-button">
+                    <i class="fas fa-magic"></i>
+                    <span id="mergeButtonText">دمج الصور بالذكاء الاصطناعي</span>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- قسم المعالجة -->
+    <section id="processing-section" class="processing-section" style="display: none;">
+        <div class="container">
+            <div class="processing-content glass-effect">
+                <div class="processing-icon">
+                    <div class="pulse-ring"></div>
+                    <i class="fas fa-cog spinning"></i>
+                </div>
+                <h3 id="processingStatus">جاري المعالجة...</h3>
+                <p class="processing-info">الذكاء الاصطناعي يقوم بدمج الصور وإنشاء تأثير البولارويد</p>
+                <div class="progress-bar">
+                    <div id="progressFill" class="progress-fill"></div>
+                </div>
+                <p id="progressText" class="progress-text">0%</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- قسم النتيجة -->
+    <section id="result-section" class="result-section" style="display: none;">
+        <div class="container">
+            <h2 class="section-title">
+                <span class="gradient-text">النتيجة النهائية</span>
+            </h2>
+            <div class="result-content glass-effect">
+                <div id="resultImage" class="result-image floating-animation"></div>
+                <div class="result-actions">
+                    <button onclick="downloadResult()" class="btn btn-primary">
+                        <i class="fas fa-download"></i>
+                        تحميل بجودة عالية
+                    </button>
+                    <button onclick="shareResult()" class="btn btn-secondary">
+                        <i class="fas fa-share"></i>
+                        مشاركة النتيجة
+                    </button>
+                    <button onclick="newMerge()" class="btn btn-accent">
+                        <i class="fas fa-redo"></i>
+                        دمج صور جديدة
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- التنبيهات -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <!-- نافذة منبثقة للتحذير من API -->
+    <div id="apiWarning" class="modal">
+        <div class="modal-content glass-effect">
+            <div class="modal-header">
+                <h3><i class="fas fa-exclamation-triangle"></i> تحذير مهم</h3>
+                <span class="modal-close" onclick="closeModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <p>هذا العرض التوضيحي يتطلب مفتاح OpenAI API للعمل الفعلي.</p>
+                <p>يمكنك الحصول على مفتاح API من <a href="https://platform.openai.com" target="_blank">موقع OpenAI</a></p>
+                <p><strong>ملاحظة:</strong> هذا المثال يعرض الواجهة فقط ولا يقوم بالدمج الفعلي للصور.</p>
+            </div>
+            <div class="modal-footer">
+                <button onclick="closeModal()" class="btn btn-primary">فهمت</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3 class="gradient-text">دمج الصور AI</h3>
+                    <p>المنصة الأكثر تطوراً لدمج الصور باستخدام الذكاء الاصطناعي مع تأثيرات البولارويد الكلاسيكية</p>
+                </div>
+
+                <div class="footer-grid">
+                    <div class="footer-column">
+                        <h4>المميزات</h4>
+                        <ul>
+                            <li>دمج فوري للصور</li>
+                            <li>جودة احترافية</li>
+                            <li>تأثيرات متنوعة</li>
+                            <li>سهولة الاستخدام</li>
+                        </ul>
+                    </div>
+                    <div class="footer-column">
+                        <h4>الدعم</h4>
+                        <ul>
+                            <li>مساعدة فورية</li>
+                            <li>دليل المستخدم</li>
+                            <li>الأسئلة الشائعة</li>
+                            <li>تواصل معنا</li>
+                        </ul>
+                    </div>
+                    <div class="footer-column">
+                        <h4>تواصل معنا</h4>
+                        <div class="social-links">
+                            <a href="#" class="social-link">📱</a>
+                            <a href="#" class="social-link">📷</a>
+                            <a href="#" class="social-link">💻</a>
+                            <a href="#" class="social-link">💼</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="footer-bottom">
+                    <p>© 2024 دمج الصور AI. جميع الحقوق محفوظة. | تم التطوير بـ ❤️ للمبدعين العرب</p>
+                    <p class="developer-credit">
+                        تطوير: <strong>علي لطيف</strong> | 
+                        <a href="https://tranks.infinityfreeapp.com/" target="_blank" rel="noopener noreferrer">
+                            https://tranks.infinityfreeapp.com/
+                        </a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
 </body>
 </html>
