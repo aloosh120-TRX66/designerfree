@@ -1,59 +1,41 @@
-const express = require('express');
-const cors = require('cors');
-const multer = require('multer');
-const { OpenAI } = require('openai');
-const path = require('path');
-const fs = require('fs');
-
-// ضع مفتاحك هنا مباشرةً
-const OPENAI_API_KEY = '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'; 
-
-const openai = new OpenAI({
-    apiKey: OPENAI_API_KEY
-});
+import express from 'express';
+import multer from 'multer';
+import { OpenAI } from 'openai';
+import cors from 'cors';
+import fs from 'fs';
+import 'dotenv/config';
 
 const app = express();
-const upload = multer({ dest: 'uploads/' });
+const port = process.env.PORT || 3000;
 
 app.use(cors());
-app.use(express.json());
+app.use(express.static('.'));
 
-// تقديم ملفات الواجهة الأمامية
-app.use(express.static(path.join(__dirname)));
+const upload = multer({ dest: 'uploads/' });
 
-app.post('/merge', upload.fields([{ name: 'image1' }, { name: 'image2' }]), async (req, res) => {
-    const { image1, image2 } = req.files;
-
-    if (!image1 || !image2) {
-        return res.status(400).json({ error: 'الرجاء تحميل كلتا الصورتين.' });
-    }
-
-    try {
-        // النمط المخصص لدمج الصور
-        const prompt = "A polaroid photo of two people standing close together. The photo should look like an ordinary photograph with no clear subject. The lighting should resemble a flash from a dark room spread evenly throughout the photo. keep the faces as they are. Replace the background behind them with a simple white curtain";
-        
-        const response = await openai.images.generate({
-            model: "dall-e-3", 
-            prompt: prompt,
-            n: 1,
-            size: "1024x1024"
-        });
-
-        const imageUrl = response.data[0].url;
-
-        // حذف الملفات المؤقتة بعد الاستخدام
-        fs.unlinkSync(image1[0].path);
-        fs.unlinkSync(image2[0].path);
-
-        res.json({ imageUrl });
-
-    } catch (error) {
-        console.error("Error generating image:", error.response?.data || error.message);
-        res.status(500).json({ error: 'حدث خطأ أثناء دمج الصور مع OpenAI.' });
-    }
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY,
 });
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
+app.post('/merge', upload.array('images', 2), async (req, res) => {
+  try {
+    const [img1, img2] = req.files;
+    const imageFile = fs.createReadStream(img1.path);
+    const maskFile = fs.createReadStream(img2.path);
+
+    const response = await openai.images.edit({
+      image: imageFile,
+      mask: maskFile,
+      prompt: "A polaroid photo of two people standing close togther. The photo should looK like an ordinary photograph with no clear subject Tne lighting should resemble a flash froma dark room sdr ead evely througt. the photo. keep the faces as they ary Replace the background behind them with a simple white curtain",
+      n: 1,
+      size: '512x512',
+    });
+
+    res.json({ url: response.data[0].url });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'فشل الدمج' });
+  }
 });
+
+app.listen(port, () => console.log(`Server running on port ${port}`));
