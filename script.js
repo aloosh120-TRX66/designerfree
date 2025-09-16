@@ -25,8 +25,8 @@ document.addEventListener('DOMContentLoaded', () => {
         formData.append('image2', image2);
 
         try {
-            // تم تعديل رابط الاتصال ليصبح /api/merge
-            const response = await fetch('/api/merge', {
+            // تم تعديل رابط الاتصال ليعود إلى المسار الأصلي
+            const response = await fetch('/merge', {
                 method: 'POST',
                 body: formData
             });
